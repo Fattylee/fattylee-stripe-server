@@ -1,14 +1,14 @@
 {
   "type": "postgres",
   "host": "localhost",
-  "port": 5433,
+  "port": 5432,
   "username": "fattylee",
   "password": "fattylee",
   "database": "typeorm",
-  "synchronize": false,
+  "synchronize": true,
   "logging": true,
   "dropSchema": false,
-  "entities": ["dist/entity/**/*.js"],
+  "entities": ["src/entity/**/*.ts"],
   "migrations": ["src/migration/**/*.ts"],
   "subscribers": ["src/subscriber/**/*.ts"],
   "cli": {
