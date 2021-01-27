@@ -29,7 +29,13 @@ const bootstrap = async () => {
     context: ({ req }) => ({ req, stripe }),
   });
 
-  apolloServer.applyMiddleware({ app });
+  apolloServer.applyMiddleware({
+    app,
+    cors: {
+      origin: "http://localhost:3000",
+      credentials: true,
+    },
+  });
   const port = 4000;
   app.listen(port, () => {
     console.log("Server is up and running", port);
