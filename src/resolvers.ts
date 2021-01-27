@@ -4,8 +4,15 @@ import { User } from "./entity/User";
 
 export const resolvers: IResolvers = {
   Query: {
-    hello() {
-      return "hello, world";
+    async me(_, __, { req }) {
+      const { userId } = req.session;
+      if (!userId) {
+        return null;
+      }
+      const user = await User.findOne(userId);
+      if (!user) return null;
+
+      return { id: user.id, email: user.email };
     },
   },
   Mutation: {
@@ -16,7 +23,7 @@ export const resolvers: IResolvers = {
       }).save();
       return { id: user.id, email: user.email };
     },
-    async login(_, { email, password }) {
+    async login(_, { email, password }, { req }) {
       const user = await User.findOne({ where: { email } });
       if (!user) {
         throw new Error("User not found.");
@@ -25,6 +32,7 @@ export const resolvers: IResolvers = {
         throw new Error("Invalid credentials.");
       }
 
+      req.session.userId = user.id;
       return { id: user.id, email: user.email };
     },
   },

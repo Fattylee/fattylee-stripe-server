@@ -2,12 +2,27 @@ import "reflect-metadata";
 import { createConnection } from "typeorm";
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
+import session from "express-session";
+
 import { typeDefs } from "./typeDefs";
 import { resolvers } from "./resolvers";
 
 const bootstrap = async () => {
   const app = express();
-  const apolloServer = new ApolloServer({ typeDefs, resolvers });
+
+  app.use(
+    session({
+      secret: "xwhuhsuhush",
+      resave: false,
+      saveUninitialized: false,
+    })
+  );
+
+  const apolloServer = new ApolloServer({
+    typeDefs,
+    resolvers,
+    context: ({ req }) => ({ req }),
+  });
   apolloServer.applyMiddleware({ app });
   const port = 4000;
   app.listen(port, () => {
